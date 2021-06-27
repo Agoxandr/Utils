@@ -16,12 +16,14 @@ namespace Agoxandr.Utils
             }
         }
 
-        public static string GetStringBetweenCharacters(string input, char charFrom, char charTo)
+        public static string GetIdentifier(string input, char charFrom, char charTo)
         {
-            int posFrom = input.IndexOf(charFrom);
+            var first = input.IndexOf(charFrom);
+            var second = input.IndexOf(charTo, first + 1);
+            var posFrom = input.IndexOf(charFrom, second + 1);
             if (posFrom != -1) //if found char
             {
-                int posTo = input.IndexOf(charTo, posFrom + 1);
+                var posTo = input.IndexOf(charTo, posFrom + 1);
                 if (posTo != -1) //if found char
                 {
                     return input.Substring(posFrom + 1, posTo - posFrom - 1);
@@ -31,7 +33,7 @@ namespace Agoxandr.Utils
             return string.Empty;
         }
 
-        [MenuItem("Assets/Update Git Packages", false, 20)]
+        [MenuItem("Window/Package Manager/Update Git Packages", false, 1000)]
         private static void UpdateGitPackages()
         {
             var lines = File.ReadAllLines(ManifestPath);
@@ -39,7 +41,7 @@ namespace Agoxandr.Utils
             {
                 if (line.Contains("git"))
                 {
-                    var identifier = GetStringBetweenCharacters(line, '"', '"');
+                    var identifier = GetIdentifier(line, '"', '"');
                     Debug.Log("Checking for updates " + identifier);
                     UnityEditor.PackageManager.Client.Add(identifier);
                 }
