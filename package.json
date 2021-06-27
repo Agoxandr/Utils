@@ -3,10 +3,12 @@
   "version": "2.5.1",
   "displayName": "Utils",
   "description": "Utility useful for almost any project.",
+  "license": "LICENSE",
+  "licensesUrl": "https://github.com/Agoxandr/Utils/blob/master/LICENSE",
   "keywords": [
-    "Utility",
-    "Utils",
-    "Agoxandr"
+    "utility",
+    "utils",
+    "agoxandr"
   ],
   "author": {
     "name": "Alexander Filippov",
