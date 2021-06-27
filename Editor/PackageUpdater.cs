@@ -33,7 +33,7 @@ namespace Agoxandr.Utils
             return string.Empty;
         }
 
-        [MenuItem("Window/Package Manager/Update Git Packages", false, 1000)]
+        [MenuItem("Assets/Update Git Packages", false, 1000)]
         private static void UpdateGitPackages()
         {
             var lines = File.ReadAllLines(ManifestPath);
