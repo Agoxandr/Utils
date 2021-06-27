@@ -2,7 +2,7 @@ using System;
 
 namespace Agoxandr.Utils
 {
-    public static class Array
+    public static class ArrayExtensions
     {
         public static T[] Append<T>(this T[] array, T item)
         {
