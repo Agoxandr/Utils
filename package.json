@@ -1,0 +1,15 @@
+{
+  "name": "de.agoxandr.utils",
+  "version": "2.5.1",
+  "displayName": "Utils",
+  "description": "Utility useful for almost any project.",
+  "keywords": [
+    "Utility",
+    "Utils",
+    "Agoxandr"
+  ],
+  "author": {
+    "name": "Alexander Filippov",
+    "email": "agoxandr@gmail.com"
+  }
+}
