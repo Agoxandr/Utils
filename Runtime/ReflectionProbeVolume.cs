@@ -8,6 +8,7 @@ namespace Agoxandr.Utils
         [Min(1)]
         public int resolution = 4;
         public float offset = 2;
+        public float blendDistance = 1;
         [Min(0)]
         public float threshold = .5f;
 

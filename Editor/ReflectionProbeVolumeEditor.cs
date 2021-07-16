@@ -11,12 +11,14 @@ namespace Agoxandr.Utils
             private SerializedProperty resolution;
             private SerializedProperty offset;
             private SerializedProperty threshold;
+            private SerializedProperty blendDistance;
 
             private void OnEnable()
             {
                 resolution = serializedObject.FindProperty("resolution");
                 offset = serializedObject.FindProperty("offset");
                 threshold = serializedObject.FindProperty("threshold");
+                blendDistance = serializedObject.FindProperty("blendDistance");
             }
 
             public override void OnInspectorGUI()
@@ -25,6 +27,7 @@ namespace Agoxandr.Utils
                 EditorGUILayout.PropertyField(resolution);
                 EditorGUILayout.PropertyField(offset);
                 EditorGUILayout.PropertyField(threshold);
+                EditorGUILayout.PropertyField(blendDistance);
                 serializedObject.ApplyModifiedProperties();
                 EditorGUILayout.Space();
                 if (GUILayout.Button("Place"))
@@ -35,9 +38,10 @@ namespace Agoxandr.Utils
 
             private void Place()
             {
-                var voxelSize = this.resolution.intValue;
+                var voxelSize = resolution.intValue;
                 var offset = this.offset.floatValue;
                 var threshold = this.threshold.floatValue;
+                var blendDistance = this.blendDistance.floatValue;
                 ReflectionProbeVolume reflectionProbeVolume = (ReflectionProbeVolume)target;
                 var transform = reflectionProbeVolume.transform;
                 //Gizmos.DrawWireCube(transform.position, transform.localScale);
@@ -62,10 +66,10 @@ namespace Agoxandr.Utils
                     zVar = transform.localScale.z / voxelSize / 2f;
                 }
 
-                CheckSquare(data, 5, voxelSize, threshold, transform);
-                CheckSquare(data, 4, voxelSize, threshold, transform);
-                CheckSquare(data, 3, voxelSize, threshold, transform);
-                CheckSquare(data, 2, voxelSize, threshold, transform);
+                CheckSquare(data, 5, voxelSize, threshold, blendDistance, transform);
+                CheckSquare(data, 4, voxelSize, threshold, blendDistance, transform);
+                CheckSquare(data, 3, voxelSize, threshold, blendDistance, transform);
+                CheckSquare(data, 2, voxelSize, threshold, blendDistance, transform);
 
                 for (int x = 0; x < voxelSize; x++)
                 {
@@ -79,13 +83,13 @@ namespace Agoxandr.Utils
                             var reflectionProbe = go.AddComponent(typeof(ReflectionProbe)) as ReflectionProbe;
                             reflectionProbe.resolution = 16;
                             reflectionProbe.center = new Vector3(0f, transform.position.y - data[x, z].y, 0f);
-                            reflectionProbe.size = new Vector3(transform.localScale.x / voxelSize, transform.localScale.y, transform.localScale.z / voxelSize);
+                            reflectionProbe.size = new Vector3(transform.localScale.x / voxelSize + blendDistance, transform.localScale.y, transform.localScale.z / voxelSize + blendDistance);
                         }
                     }
                 }
             }
 
-            private void CheckSquare(Vector3[,] data, int size, int voxelSize, float threshold, Transform transform)
+            private void CheckSquare(Vector3[,] data, int size, int voxelSize, float threshold, float blendDistance, Transform transform)
             {
                 for (int x = 0; x < voxelSize; x++)
                 {
@@ -122,12 +126,25 @@ namespace Agoxandr.Utils
                                 go.transform.SetParent(transform);
                                 go.transform.position = point;
                                 var reflectionProbe = go.AddComponent(typeof(ReflectionProbe)) as ReflectionProbe;
-                                if (size == 2) reflectionProbe.resolution = 16;
-                                else if (size == 3) reflectionProbe.resolution = 32;
-                                else if (size == 4) reflectionProbe.resolution = 32;
-                                else if (size == 5) reflectionProbe.resolution = 64;
+                                if (size == 2)
+                                {
+                                    reflectionProbe.resolution = 16;
+                                }
+                                else if (size == 3)
+                                {
+                                    reflectionProbe.resolution = 32;
+                                }
+                                else if (size == 4)
+                                {
+                                    reflectionProbe.resolution = 32;
+                                }
+                                else if (size == 5)
+                                {
+                                    reflectionProbe.resolution = 64;
+                                }
+
                                 reflectionProbe.center = new Vector3(0f, transform.position.y - point.y, 0f);
-                                reflectionProbe.size = new Vector3(transform.localScale.x / voxelSize * size, transform.localScale.y, transform.localScale.z / voxelSize * size);
+                                reflectionProbe.size = new Vector3(transform.localScale.x / voxelSize * size + blendDistance, transform.localScale.y, transform.localScale.z / voxelSize * size + blendDistance);
 
                                 for (int i = 0; i < size; i++)
                                 {
@@ -147,5 +164,5 @@ namespace Agoxandr.Utils
                 return Mathf.Abs(arg0 - arg1) < threshold;
             }
         }
-    } 
+    }
 }
